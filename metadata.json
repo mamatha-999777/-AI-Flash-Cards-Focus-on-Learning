@@ -1,0 +1,8 @@
+{
+  "name": "AI Flash Cards : Focus on Learning",
+  "description": "The ultimate AI Flashcard generator and study companion. Snapshot textbooks, organize study guides in folders, and master concepts with focus-driven quiz modes.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}

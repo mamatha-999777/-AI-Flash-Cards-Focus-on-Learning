@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Information about the registered student",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Flashcard": {
+      "title": "Flashcard",
+      "description": "A single study card with front and back content",
+      "type": "object",
+      "properties": {
+        "front": { "type": "string", "description": "The question or prompt" },
+        "back": { "type": "string", "description": "The answer or definition" }
+      },
+      "required": ["front", "back"]
+    },
+    "QuizQuestion": {
+      "title": "Quiz Question",
+      "description": "A multiple choice question generated from textbook content",
+      "type": "object",
+      "properties": {
+        "question": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 4 },
+        "correctAnswer": { "type": "string" },
+        "explanation": { "type": "string", "description": "Detailed reasoning for the answer" }
+      },
+      "required": ["question", "options", "correctAnswer", "explanation"]
+    },
+    "Folder": {
+      "title": "Study Group Folder",
+      "description": "Organizes study guides into categories",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Display name of the folder" },
+        "color": { "type": "string", "description": "Hex or theme color code" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "createdAt"]
+    },
+    "StudyGuide": {
+      "title": "Study Guide",
+      "description": "AI-generated study material including flashcards and quizzes",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The owner of the guide" },
+        "title": { "type": "string", "description": "AI-suggested title for the study session" },
+        "flashcards": {
+          "type": "array",
+          "items": { "$ref": "#/entities/Flashcard" },
+          "maxItems": 30
+        },
+        "quiz": {
+          "type": "array",
+          "items": { "$ref": "#/entities/QuizQuestion" },
+          "maxItems": 15
+        },
+        "imageUrl": { "type": "string", "description": "Optimized base64 or storage URL of the textbook scan" },
+        "folderId": { "type": "string", "description": "Optional folder classification" },
+        "isPublic": { "type": "boolean", "description": "Whether this guide can be viewed via unique link" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "flashcards", "quiz", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile document"
+    },
+    "/users/{userId}/folders/{folderId}": {
+      "schema": "Folder",
+      "description": "User created folders for organization"
+    },
+    "/users/{userId}/studyGuides/{guideId}": {
+      "schema": "StudyGuide",
+      "description": "Collection of learning material generated from textbook scans"
+    }
+  }
+}
